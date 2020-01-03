@@ -17,6 +17,20 @@ class Game {
   }
 
   registerEvents() {
+    const writeKey = (e) => {
+      let keyToCompare = this.currentSymbol.innerHTML;
+      if (e.key === e.key.match(/[a-z]/)[0]) {
+        if (e.key === keyToCompare){
+  
+          this.success();
+        } else {
+          console.log(e.key.match(/[a-z]/));
+          this.fail();
+        }
+      }
+
+    }
+    document.addEventListener('keydown', writeKey);
     /*
       TODO:
       Написать обработчик события, который откликается
@@ -87,4 +101,3 @@ class Game {
 }
 
 new Game(document.getElementById('game'))
-
