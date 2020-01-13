@@ -7,7 +7,8 @@ class Game {
     this.timer = container.querySelector('.timer');
 
     this.reset();
-
+    this.changeTime();
+    this.timerSet();
     this.registerEvents();
   }
 
@@ -22,10 +23,8 @@ class Game {
       let keyToCompare = this.currentSymbol.innerHTML;
       if (e.key === e.key.match(/[a-z]/)[0]) {
         if (e.key === keyToCompare){
-
           this.success();
         } else {
-          console.log(e.key.match(/[a-z]/));
           this.fail();
         }
       }
@@ -53,6 +52,7 @@ class Game {
       this.reset();
     }
     this.setNewWord();
+    this.changeTime();
   }
 
   fail() {
@@ -61,22 +61,29 @@ class Game {
       this.reset();
     }
     this.setNewWord();
+    this.changeTime();
   }
 
   setNewWord() {
     const word = this.getWord();
-    this.timer.innerHTML = `${word.length}`;
+    this.renderWord(word);
+  }
+
+  changeTime() {
+    let word = document.querySelector('.word');
+    this.timer.innerHTML = `${word.children.length}`;
+  }
+
+  timerSet() {
     let timerCount = () => {
       let startNumber = this.timer.innerHTML;
       startNumber -= 0.1;
       this.timer.innerHTML = startNumber.toFixed(1);
       if (startNumber < 0) {
-        clearInterval(timerStart);
         this.fail();
       }
     }
-    let timerStart = setInterval(timerCount , 100);
-    this.renderWord(word);
+   let timerStart = setInterval(timerCount , 100);
   }
 
   getWord() {
@@ -111,4 +118,4 @@ class Game {
   }
 }
 
-new Game(document.getElementById('game'))
+new Game(document.getElementById('game'));
