@@ -98,3 +98,8 @@ body {
 .product-shadow {
   position: absolute;
 }
+
+.animotion_start {
+  position: fixed;
+  transition: 1s;
+}

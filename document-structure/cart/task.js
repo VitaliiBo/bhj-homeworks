@@ -2,6 +2,8 @@ const increases = document.querySelectorAll('.product__quantity-control_inc');
 const decreases = document.querySelectorAll('.product__quantity-control_dec');
 const addProduct = document.querySelectorAll('.product__add');
 const cart = document.querySelector('.cart__products');
+const body = document.querySelector('body');
+const emptyCart = document.querySelector('.cart');
 
 function increase() {
   this.previousElementSibling.innerHTML = parseInt(this.previousElementSibling.innerHTML) + 1;
@@ -9,6 +11,13 @@ function increase() {
 function decrease() {
   if (parseInt(this.nextElementSibling.innerHTML) > 1) {
     this.nextElementSibling.innerHTML = parseInt(this.nextElementSibling.innerHTML) - 1;
+  }
+}
+function isCartEmpty() {
+  if(emptyCart.querySelectorAll('.cart__product').length > 0){
+    emptyCart.style.display = 'block';
+  } else {
+    emptyCart.style.display = 'none';
   }
 }
 function addToCart() {
@@ -30,6 +39,7 @@ function addToCart() {
     cart.insertAdjacentHTML('afterBegin', div);
     }
   handleRemoveListeners();
+  isCartEmpty();
 }
 function handleRemoveListeners() {
   let removeButtons = document.querySelectorAll('.product_remove');
@@ -40,6 +50,7 @@ function handleRemoveListeners() {
 }
 function removeFromCart() {
   this.parentNode.remove();
+  isCartEmpty();
 }
 function animotion(button) {
   let product = button.closest('.product');
@@ -48,13 +59,27 @@ function animotion(button) {
   let alreadyInCart = cartProduct.find(item => item.dataset.id === productId);
   let imageInCart = alreadyInCart.querySelector('img');
   let imageClone = product.querySelector('img');
+  let imageXY = {
+    top: imageClone.getBoundingClientRect().top,
+    left: imageClone.getBoundingClientRect().left
+  }
   temp = product.querySelector('img');
   imageClone = product.querySelector('img').cloneNode(true);
-  console.log(imageClone);
+  imageClone.classList.add('animotion_start');
+  imageClone.style.top = `${imageXY.top}px`;
+  imageClone.style.left = `${imageXY.left}px`;
+  body.appendChild(imageClone);
+  setTimeout(function () {
+    imageClone.style.top = `${imageInCart.getBoundingClientRect().top}px`;
+    imageClone.style.left = `${imageInCart.getBoundingClientRect().left}px`;
+    imageClone.style.opacity = '0';
+    setTimeout(function () {
+      imageClone.remove();
+    }, 1000);
+  }, 10);
 }
 
 increases.forEach(item => { item.addEventListener('click', increase) });
 decreases.forEach(item => { item.addEventListener('click', decrease) });
 addProduct.forEach(item => { item.addEventListener('click', addToCart) });
-
-let temp;
+isCartEmpty();
